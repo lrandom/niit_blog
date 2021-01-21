@@ -1,12 +1,15 @@
-@extends('layout.master')
-@section('css')
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-@stop
-@section('content')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				@include('partials.modal-login')
 				<h1>Posts</h1>
 
 
@@ -17,23 +20,8 @@
 				<br>
 				<form action="">
 					<div class="row">
-						<div class="col-md-3">
+						<div class="col-md-6">
 							<input placeholder="Nhập nội dung cần tìm kiếm" type="text" name="keyword" value="{{ request()->input('keyword') }}" class="form-control">
-						</div>
-						<div class="col-md-3">
-							<select name="category_id" id="" class="form-control">
-								<option value="">Chọn category</option>
-								@foreach($categories as $category)
-									<option {{ request()->input('category_id') == $category->id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
-								@endforeach
-							</select>
-						</div>
-						<div class="col-md-3">
-							<select name="tag_ids[]" id="" class="form-control select2" multiple="">
-								@foreach($tags as $tag)
-									<option {{ in_array($tag->id, request()->input('tag_ids', [])) ? 'selected' : '' }} value="{{ $tag->id }}">{{ $tag->name }}</option>
-								@endforeach
-							</select>
 						</div>
 						<div class="col-md-6">
 							<button class="btn btn-primary" type="submit">Tìm kiếm</button>
@@ -48,7 +36,6 @@
 				      <th scope="col">#</th>
 				      <th scope="col">Title</th>
 				      <th scope="col">Category</th>
-				      <th scope="col">Tag</th>
 				      <th scope="col">Created At</th>
 				      <th scope="col">Action</th>
 				    </tr>
@@ -61,15 +48,6 @@
 					      <td>
 					      	@if ($post->category)
 					      		{{ $post->category->name }}
-					      	@endif
-					      </td>
-					      <td>
-					      	@if ($post->tags()->count())
-					      		<ul>
-						      		@foreach($post->tags as $tag)
-						      			<li>{{ $tag->name }}</li>
-						      		@endforeach
-					      		</ul>
 					      	@endif
 					      </td>
 					      <td>{{ $post->created_at }}</td>
@@ -93,12 +71,9 @@
 
 	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-	<script>
-		$(document).ready(function() {
-		    $('.select2').select2();
-		});
-	</script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script>
 		$(document).ready(function () {
 			$('.btn-delete').click(function () {
@@ -109,25 +84,5 @@
 			});
 		})
 	</script>
-{{-- @stop --}}
-@endsection
-
-@push('css')
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-@endpush
-
-@push('meta')
-	<title>Danh sách bài viết</title>
-@endpush
-
-
-
-master
-
-@stack('ten_stack')
-
-child
-
-@push('ten_stack')
-
-@endpush
+</body>
+</html>

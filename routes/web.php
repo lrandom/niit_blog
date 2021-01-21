@@ -139,6 +139,14 @@ Route::put('posts/{id}', 'PostController@update')->name('posts.update');
 Route::delete('posts/{id}', 'PostController@destroy')->name('posts.destroy');
 
 
+Route::get('categories/{id}/posts', 'CategoryController@posts');
+
+Route::get('tags/{id}/posts', 'TagController@posts');
+
+
+
+
+
 Route::get('fake-du-lieu', function () {
     for ($i=0; $i < 122; $i++) {
         $post = new \App\Models\Post;
@@ -167,5 +175,57 @@ Route::get('fake-category', function () {
 });
 
 
+Route::get('fake-user', function () {
+    $user =  new \App\Models\User;
+    $user->name = 'Quyet Tran';
+    $user->email = 'quyettv@topcv.vn';
+    $user->password = bcrypt('123456789');
+    $user->save();
+});
 
+Route::get('fake-profile', function () {
+    $profile =  new \App\Models\Profile;
+
+    $profile->id_code = '12341231234';
+    $profile->address = 'Ha Noi';
+    $profile->gender = 1;
+    $profile->user_id = 1;
+
+    $profile->save();
+});
+
+Route::get('relationship/one-to-one', function () {
+    $user = \App\Models\User::find(1);
+
+    echo "Name: {$user->name} <br>";
+    echo "Address: {$user->profile->address} <br>";
+});
+
+
+
+Route::get('relationship/one-to-one-reverse', function () {
+    $profile = \App\Models\Profile::find(1);
+
+    echo "Address: {$profile->address} <br>";
+    echo "Name: {$profile->user->name} <br>";
+    echo "Email: {$profile->user->email} <br>";
+});
+
+
+Route::get('fake-tag', function () {
+    $tag = new \App\Models\Tag;
+    $tag->name = 'covid';
+    $tag->save();
+
+
+    $tag = new \App\Models\Tag;
+    $tag->name = 'kinh doanh';
+    $tag->save();
+
+
+    $tag = new \App\Models\Tag;
+    $tag->name = 'MMA';
+    $tag->save();
+
+});
 

@@ -1,0 +1,14 @@
+Relationship:
+
+1 - 1
+	1.user -> 1.profile_infomation || 1.profile_infomation -> 1.user
+	User hasOne ProfileInfomation  ||  ProfileInfomation belongsTo User
+
+1 - n
+	1.post -> 1.category || 1.category -> n.post
+	Post belongsTo Category || Category hasMany Post
+
+n - n
+	1.subject -> n.students || 1.student -> n.subject
+	Subject belongsToMany Students || Student belongsToMany Subject
+
