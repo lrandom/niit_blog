@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-
-</head>
-<body>
+@extends('layout.master')
+@section('content')
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6">
@@ -18,17 +9,26 @@
 					@method('put')
 				  	<div class="form-group">
 					    <label for="">Title</label>
-					    <input name="title" type="text" class="form-control" id="" placeholder="Enter title" value="{{ $post->title }}">
+					    <input name="title" type="text" class="form-control" id="" placeholder="Enter title" value="{{ old('title', $post->title) }}">
+					    @error('title')
+					    	<p class="text-danger">{{ $message }}</p>
+					    @enderror
 				 	</div>
 
 				  	<div class="form-group">
 					    <label for="">Description</label>
-					    <input name="description" type="text" class="form-control" id="" placeholder="Enter Description" value="{{ $post->description }}">
+					    <input name="description" type="text" class="form-control" id="" placeholder="Enter Description" value="{{ old('description', $post->description) }}">
+					    @error('description')
+					    	<p class="text-danger">{{ $message }}</p>
+					    @enderror
 				 	</div>
 
 				  	<div class="form-group">
 					    <label for="">Content</label>
-					    <textarea name="content" id="" cols="30" rows="5" class="form-control">{{ $post->content }}</textarea>
+					    <textarea name="content" id="" cols="30" rows="5" class="form-control">{{ old('content', $post->content) }}</textarea>
+					    @error('content')
+					    	<p class="text-danger">{{ $message }}</p>
+					    @enderror
 				 	</div>
 
 				  	<div class="form-group">
@@ -39,10 +39,13 @@
 					    		<option {{ $category->id == $post->category_id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
 					    	@endforeach
 					    </select>
+					    @error('category_id')
+					    	<p class="text-danger">{{ $message }}</p>
+					    @enderror
 				 	</div>
 
 				 	@php
-				 		$tagsIds = $post->tags->pluck('id')->toArray();
+				 		$tagsIds = old('tags_id', $post->tags->pluck('id')->toArray());
 				 	@endphp
 				  	<div class="form-group">
 					    <label for="">Tag</label>
@@ -52,6 +55,9 @@
 					    	@endforeach
 					    </select>
 				 	</div>
+				 	@error('description')
+				    	<p class="text-danger">{{ $message }}</p>
+				    @enderror
 
 				  	<button type="submit" class="btn btn-primary">Update</button>
 				</form>
@@ -61,6 +67,14 @@
 
 	</div>
 
+@stop
+
+
+@push('css')
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
+{{--
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -71,4 +85,4 @@
 		});
 	</script>
 </body>
-</html>
+</html> --}}

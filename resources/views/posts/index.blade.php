@@ -120,14 +120,3 @@
 	<title>Danh sách bài viết</title>
 @endpush
 
-
-
-master
-
-@stack('ten_stack')
-
-child
-
-@push('ten_stack')
-
-@endpush

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRegisterRequest;
 
 class AuthController extends Controller
 {
@@ -17,5 +18,15 @@ class AuthController extends Controller
     	$password =  $request->input('password');
 
     	dd($username, $password);
+    }
+
+    public function getFormRegister()
+    {
+        return view('auth.register');
+    }
+
+    public function submitRegister(UserRegisterRequest $request)
+    {
+
     }
 }

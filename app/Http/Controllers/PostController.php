@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
+use Validator;
+use App\Http\Requests\CreateNewPostRequest;
 
 class PostController extends Controller
 {
@@ -16,8 +18,45 @@ class PostController extends Controller
 		return view('posts.create', compact('categories', 'tags'));
 	}
 
-	public function store(Request $request)
+
+	// php artisan make:request CreateNewPostRequest
+
+	public function store(CreateNewPostRequest $request)
 	{
+		// $this->validate($request, [
+		// $request->validate([
+		// 	'title' => 'required|min:10|unique:posts',
+		// 	'description' => 'required',
+		// 	'content' => 'required',
+		// 	'category_id' => 'required',
+		// ], [
+		// 	'title.unique' => 'Tiêu đề đã tồn tại trên hệ thống',
+		// 	'title.required' => 'Tiêu đề là trường bắt buộc',
+		// 	'description.required' => 'Mô tả là trường bắt buộc',
+		// 	'content.required' => 'Nội dung là trường bắt buộc',
+		// 	'category_id.required' => 'Danh mục là trường bắt buộc',
+		// 	'title.min' => 'Tiêu đề tối thiểu 10 ký tự',
+		// ]);
+
+		// $validator = Validator::make($request->all(), [
+		// 	'title' => 'required|min:8|unique:posts',
+		// 	'description' => 'required',
+		// 	'content' => 'required',
+		// 	'category_id' => 'required',
+		// ], [
+		// 	'title.unique' => 'Tiêu đề đã tồn tại trên hệ thống',
+		// 	'title.required' => 'Tiêu đề là trường bắt buộc',
+		// 	'description.required' => 'Mô tả là trường bắt buộc',
+		// 	'content.required' => 'Nội dung là trường bắt buộc',
+		// 	'category_id.required' => 'Danh mục là trường bắt buộc',
+		// 	'title.min' => 'Tiêu đề tối thiểu 8 ký tự',
+		// ]);
+
+		// dd($validator->fails());
+		// if ($validator->fails()) {
+		// 	return redirect()->back()->withErrors($validator)->withInput();
+		// }
+
 		//php artisan make:model Post
 		$title = $request->input('title');
 		$description = $request->input('description');
@@ -75,6 +114,25 @@ class PostController extends Controller
 
 	public function update($id, Request $request)
 	{
+		$validator = Validator::make($request->all(), [
+			'title' => 'required|min:8|unique:posts,title,' . $id .',id',
+			'description' => 'required|same:title',
+			'content' => 'required',
+			'category_id' => 'required',
+		], [
+			'title.email' => 'Email không hợp lệ',
+			'title.required' => 'Tiêu đề là trường bắt buộc',
+			'description.required' => 'Mô tả là trường bắt buộc',
+			'content.required' => 'Nội dung là trường bắt buộc',
+			'category_id.required' => 'Danh mục là trường bắt buộc',
+			'title.min' => 'Tiêu đề tối thiểu 8 ký tự',
+		]);
+
+		// dd($validator->fails());
+		if ($validator->fails()) {
+			return redirect()->back()->withErrors($validator)->withInput();
+		}
+
 		$post = Post::find($id);
 
 		$title = $request->input('title');

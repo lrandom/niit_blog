@@ -13,17 +13,26 @@
 					@csrf
 				  	<div class="form-group">
 					    <label for="">Title</label>
-					    <input name="title" type="text" class="form-control" id="" placeholder="Enter title">
+					    <input name="title" type="text" class="form-control" value="{{ old('title') }}" id="" placeholder="Enter title">
+					    @error('title')
+					    	<p class="text-danger">{{ $message }}</p>
+					    @enderror
 				 	</div>
 
 				  	<div class="form-group">
 					    <label for="">Description</label>
-					    <input name="description" type="text" class="form-control" id="" placeholder="Enter Description">
+					    <input value="{{ old('description') }}" name="description" type="text" class="form-control" id="" placeholder="Enter Description">
+					    @error('description')
+					    	<p class="text-danger">{{ $message }}</p>
+					    @enderror
 				 	</div>
 
 				  	<div class="form-group">
 					    <label for="">Content</label>
-					    <textarea name="content" id="" cols="30" rows="5" class="form-control"></textarea>
+					    <textarea name="content" id="" cols="30" rows="5" class="form-control">{{ old('content') }}</textarea>
+					    @error('content')
+					    	<p class="text-danger">{{ $message }}</p>
+					    @enderror
 				 	</div>
 
 				  	<div class="form-group">
@@ -31,19 +40,28 @@
 					    <select name="category_id" id="" class="form-control">
 					    	<option value="">Choose category</option>
 					    	@foreach($categories as $category)
-					    		<option value="{{ $category->id }}">{{ $category->name }}</option>
+					    		<option {{ old('category_id') == $category->id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
 					    	@endforeach
 					    </select>
+					    @error('category_id')
+					    	<p class="text-danger">{{ $message }}</p>
+					    @enderror
 				 	</div>
 
 
 				  	<div class="form-group">
+				  		@php
+				  			$inputTags = old('tags_id', []);
+				  		@endphp
 					    <label for="">Tag</label>
 					    <select multiple name="tags_id[]" id="" class="form-control select2">
 					    	@foreach($tags as $tag)
-					    		<option value="{{ $tag->id }}">{{ $tag->name }}</option>
+					    		<option {{ in_array($tag->id, $inputTags) ? 'selected' : '' }} value="{{ $tag->id }}">{{ $tag->name }}</option>
 					    	@endforeach
 					    </select>
+					    @error('tags_id')
+					    	<p class="text-danger">{{ $message }}</p>
+					    @enderror
 				 	</div>
 
 				  	<button type="submit" class="btn btn-primary">Save</button>

@@ -103,9 +103,10 @@ Route::get('giai-pt-b2-submit', 'Ptb2Controller@submitPtb2');
 
 // Lấy dữ liệu
 Route::get('login', 'AuthController@getFormLogin');
-
-// Tạo mới dữ liệu
 Route::post('login', 'AuthController@submitLogin');
+
+Route::get('register', 'AuthController@getFormRegister');
+Route::post('register', 'AuthController@submitRegister')->name('register.submit');
 
 // Cập nhật dữ liệu
 Route::put('posts', 'PostController@update');
