@@ -102,48 +102,31 @@ Route::get('giai-pt-b2', 'Ptb2Controller@getFormGiaiPtb2');
 Route::get('giai-pt-b2-submit', 'Ptb2Controller@submitPtb2');
 
 // Lấy dữ liệu
-Route::get('login', 'AuthController@getFormLogin');
+Route::get('login', 'AuthController@getFormLogin')->name('login');
+Route::post('logout', 'AuthController@logout')->name('logout');
 Route::post('login', 'AuthController@submitLogin');
 
 Route::get('register', 'AuthController@getFormRegister');
 Route::post('register', 'AuthController@submitRegister')->name('register.submit');
 
+
+Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
+    Route::put('posts', 'PostController@update');
+    Route::get('posts-edit', 'PostController@edit');
+    Route::delete('posts', 'PostController@destroy');
+    Route::get('posts/create', 'PostController@create')->name('posts.create');
+    Route::post('posts', 'PostController@store')->name('posts.store');
+    Route::get('posts', 'PostController@index')->name('posts.index')->middleware('permission.checker:editor|moderator');
+    Route::get('posts/{id}/edit', 'PostController@edit')->name('posts.edit')->middleware('permission.checker:admin|moderator');;
+    Route::put('posts/{id}', 'PostController@update')->name('posts.update');
+    Route::delete('posts/{id}', 'PostController@destroy')->name('posts.destroy');
+    Route::get('categories/{id}/posts', 'CategoryController@posts');
+    Route::get('tags/{id}/(posts', 'TagController@posts');
+    Route::get('only-male', function() {
+        echo "Male Zone";
+    })->middleware('only.male');
+});
 // Cập nhật dữ liệu
-Route::put('posts', 'PostController@update');
-Route::get('posts-edit', 'PostController@edit');
-
-// Xóa dữ liệu
-Route::delete('posts', 'PostController@destroy');
-
-
-// Route::post('posts/create', 'PostController@update');
-// Route::post('posts/update', 'PostController@update');
-// Route::post('posts/delete', 'PostController@update');
-
-
-// Route::post('posts', 'PostController@update');
-// Route::put('posts', 'PostController@update');
-// Route::delete('posts', 'PostController@update');
-
-//Hiển thị form tạo mới
-Route::get('posts/create', 'PostController@create')->name('posts.create');
-
-//Nhận dữ liệu từ form tạo mới
-Route::post('posts', 'PostController@store')->name('posts.store');
-Route::get('posts', 'PostController@index')->name('posts.index');
-
-// posts/10/edit
-
-// posts/10
-Route::get('posts/{id}/edit', 'PostController@edit')->name('posts.edit');
-Route::put('posts/{id}', 'PostController@update')->name('posts.update');
-Route::delete('posts/{id}', 'PostController@destroy')->name('posts.destroy');
-
-
-Route::get('categories/{id}/posts', 'CategoryController@posts');
-
-Route::get('tags/{id}/posts', 'TagController@posts');
-
 
 
 
@@ -178,8 +161,9 @@ Route::get('fake-category', function () {
 
 Route::get('fake-user', function () {
     $user =  new \App\Models\User;
-    $user->name = 'Quyet Tran';
-    $user->email = 'quyettv@topcv.vn';
+    $user->name = 'Nguyễn Thị A';
+    $user->email = 'ant@topcv.vn';
+    $user->gender = 2;
     $user->password = bcrypt('123456789');
     $user->save();
 });
@@ -229,4 +213,17 @@ Route::get('fake-tag', function () {
     $tag->save();
 
 });
+
+
+Route::get('relationship/one-to-one-reverse', function () {
+    $profile = \App\Models\Profile::find(1);
+
+    echo "Address: {$profile->address} <br>";
+    echo "Name: {$profile->user->name} <br>";
+    echo "Email: {$profile->user->email} <br>";
+});
+
+Route::get('403', function() {
+    return view('403');
+})->name('403');
 

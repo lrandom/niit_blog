@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRegisterRequest;
+use Auth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -17,7 +19,14 @@ class AuthController extends Controller
     	$username =  $request->input('username');
     	$password =  $request->input('password');
 
-    	dd($username, $password);
+    	if (Auth::attempt([
+            'email' => $username,
+            'password' => $password,
+        ])) {
+            $user = User::where('email', $username)->first();
+            Auth::login($user);
+            return redirect()->route('posts.index');
+        }
     }
 
     public function getFormRegister()
@@ -28,5 +37,11 @@ class AuthController extends Controller
     public function submitRegister(UserRegisterRequest $request)
     {
 
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
     }
 }
