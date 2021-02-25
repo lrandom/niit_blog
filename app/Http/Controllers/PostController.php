@@ -8,11 +8,15 @@ use App\Models\Category;
 use App\Models\Tag;
 use Validator;
 use App\Http\Requests\CreateNewPostRequest;
+use Gate;
 
 class PostController extends Controller
 {
 	public function create()
 	{
+		if (Gate::denies('post-create')) {
+			abort(403);
+		}
 		$categories = Category::all();
 		$tags = Tag::all();
 		return view('posts.create', compact('categories', 'tags'));
@@ -56,7 +60,6 @@ class PostController extends Controller
 		// if ($validator->fails()) {
 		// 	return redirect()->back()->withErrors($validator)->withInput();
 		// }
-
 		//php artisan make:model Post
 		$title = $request->input('title');
 		$description = $request->input('description');
@@ -71,12 +74,17 @@ class PostController extends Controller
 		$post->category_id = $categoryId;
 		$post->save();
 		$post->tags()->sync($tagIds);
-
+		// $post->slug = Str::slug($title);
+		// $post->save();
+		event(new \App\Events\PostCreated($post));
 		return redirect()->route('posts.index');
 	}
 
 	public function index(Request $request)
 	{
+		if (Gate::denies('post-index')) {
+			abort(403);
+		}
 		$keyword = $request->input('keyword');
 		$categoryId = $request->input('category_id');
 		$tagIds = $request->input('tag_ids', []);
@@ -106,6 +114,7 @@ class PostController extends Controller
 
 	public function edit($id)
 	{
+
 		$tags = Tag::all();
 		$categories = Category::all();
 		$post = Post::find($id);
@@ -149,7 +158,7 @@ class PostController extends Controller
 		$post->save();
 
 		$post->tags()->sync($tagIds);
-
+		event(new \App\Events\PostUpdated($post));
 		return redirect()->route('posts.index');
 	}
 

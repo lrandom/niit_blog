@@ -25,6 +25,21 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('post-index', function ($user) {
+            $allowRoles = [
+                'admin',
+                'moderator',
+                'editor',
+            ];
+            return in_array($user->getStrType(), $allowRoles);
+        });
+        Gate::define('post-create', function ($user) {
+            $allowRoles = [
+                'admin',
+                // 'moderator',
+                'editor',
+            ];
+            return in_array($user->getStrType(), $allowRoles);
+        });
     }
 }

@@ -9,7 +9,7 @@
 		<div class="row">
 			<div class="col-md-6">
 				<h1>Create new Post</h1>
-				<form action="/posts" method="POST">
+				<form action="{{ route('posts.store') }}" method="POST">
 					@csrf
 				  	<div class="form-group">
 					    <label for="">Title</label>

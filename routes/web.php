@@ -116,8 +116,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::delete('posts', 'PostController@destroy');
     Route::get('posts/create', 'PostController@create')->name('posts.create');
     Route::post('posts', 'PostController@store')->name('posts.store');
-    Route::get('posts', 'PostController@index')->name('posts.index')->middleware('permission.checker:editor|moderator');
-    Route::get('posts/{id}/edit', 'PostController@edit')->name('posts.edit')->middleware('permission.checker:admin|moderator');;
+    // Route::get('posts', 'PostController@index')->name('posts.index')->middleware('permission.checker:editor|moderator|admin');
+    Route::get('posts', 'PostController@index')->name('posts.index');
+    Route::get('posts/{id}/edit', 'PostController@edit')->name('posts.edit');
     Route::put('posts/{id}', 'PostController@update')->name('posts.update');
     Route::delete('posts/{id}', 'PostController@destroy')->name('posts.destroy');
     Route::get('categories/{id}/posts', 'CategoryController@posts');
@@ -226,4 +227,63 @@ Route::get('relationship/one-to-one-reverse', function () {
 Route::get('403', function() {
     return view('403');
 })->name('403');
+
+Route::get('test', function() {
+    $posts = \App\Models\Post::whereIn('category_id', [2, 3])->orderBy('id', 'desc')->get();
+
+    $postsWith2Category = $posts->filter(function($post) {
+        return $post->category_id == 2;
+    });
+
+    dd($postsWith2Category);
+    // $arr = [
+    //     1,
+    //     3,
+    //     5
+    // ];
+    // $first = array_shift($arr);
+    // echo $first;
+
+    $arr = collect([2, 1, 4, 6, 50, 10]);
+    echo $arr->first() . "<br>";
+    echo $arr->last() . "<br>";
+    echo $arr->max() . "<br>";
+    echo $arr->min() . "<br>";
+    echo "Duyệt mảng :<br>";
+    $arr->push(90);
+    foreach ($arr as $key => $value) {
+        echo $value . "<br>";
+    }
+    echo "Mảng sắp xếp :<br>";
+    $arr = $arr->sort();
+    foreach ($arr as $key => $value) {
+        echo $value . "<br>";
+    }
+    echo "Mảng lẻ :<br>";
+    $oddArr = $arr->filter(function ($item) {
+        return $item % 2 == 1;
+    });
+    foreach ($oddArr as $key => $value) {
+        echo $value . "<br>";
+    }
+    echo "Mảng chẵn :<br>";
+    $oddArr = $arr->filter(function ($item) {
+        return $item % 2 == 0;
+    });
+    foreach ($oddArr as $key => $value) {
+        echo $value . "<br>";
+    }
+    echo "Mảng sau khi nhân tất cả phần tử cho 5 :<br>";
+    $mul5Arr = $arr->map(function ($item) {
+        return $item * 5;
+    });
+    foreach ($mul5Arr as $key => $value) {
+        echo $value . "<br>";
+    }
+
+
+});
+
+
+
 

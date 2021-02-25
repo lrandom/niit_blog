@@ -9,8 +9,9 @@
 				@include('partials.modal-login')
 				<h1>Posts</h1>
 
-
-				<a href="{{ route('posts.create') }}" class="btn btn-primary">New Post</a>
+				@can('post-create')
+					<a href="{{ route('posts.create') }}" class="btn btn-primary">New Post</a>
+				@endcan
 
 
 				<br>
