@@ -285,5 +285,9 @@ Route::get('test', function() {
 });
 
 
+Route::get('test-timeout', function() {
+    sleep(120);
+    echo "Hello";
+});
 
 
