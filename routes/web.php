@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('homepage	');
-});
+Route::get('/', 'PageController@home');
+Route::get('/bai-viet/{slug}.html', 'PostController@show')->name('post.show');
+// Route::get('/', function () {
+//     return view('client.page.home');
+// });
 
 Route::get('/niit', function () {
     return view('welcome');

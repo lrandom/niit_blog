@@ -123,24 +123,24 @@ class PostController extends Controller
 
 	public function update($id, Request $request)
 	{
-		$validator = Validator::make($request->all(), [
-			'title' => 'required|min:8|unique:posts,title,' . $id .',id',
-			'description' => 'required|same:title',
-			'content' => 'required',
-			'category_id' => 'required',
-		], [
-			'title.email' => 'Email không hợp lệ',
-			'title.required' => 'Tiêu đề là trường bắt buộc',
-			'description.required' => 'Mô tả là trường bắt buộc',
-			'content.required' => 'Nội dung là trường bắt buộc',
-			'category_id.required' => 'Danh mục là trường bắt buộc',
-			'title.min' => 'Tiêu đề tối thiểu 8 ký tự',
-		]);
+		// $validator = Validator::make($request->all(), [
+		// 	'title' => 'required|min:8|unique:posts,title,' . $id .',id',
+		// 	'description' => 'required|same:title',
+		// 	'content' => 'required',
+		// 	'category_id' => 'required',
+		// ], [
+		// 	'title.email' => 'Email không hợp lệ',
+		// 	'title.required' => 'Tiêu đề là trường bắt buộc',
+		// 	'description.required' => 'Mô tả là trường bắt buộc',
+		// 	'content.required' => 'Nội dung là trường bắt buộc',
+		// 	'category_id.required' => 'Danh mục là trường bắt buộc',
+		// 	'title.min' => 'Tiêu đề tối thiểu 8 ký tự',
+		// ]);
 
-		// dd($validator->fails());
-		if ($validator->fails()) {
-			return redirect()->back()->withErrors($validator)->withInput();
-		}
+		// // dd($validator->fails());
+		// if ($validator->fails()) {
+		// 	return redirect()->back()->withErrors($validator)->withInput();
+		// }
 
 		$post = Post::find($id);
 
@@ -169,5 +169,10 @@ class PostController extends Controller
 		return redirect()->route('posts.index');
 	}
 
+	public function show($slug)
+	{
+		$post = Post::where('slug', $slug)->first();
+		return view('client.post.show', compact('post'));
+	}
 
 }

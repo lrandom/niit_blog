@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('data:crawl')->everyMinute();
+        // $schedule->command('data:crawl')->everyMinute();
 
         // php artisan schedule:runc
     }
