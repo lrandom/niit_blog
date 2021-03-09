@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'PageController@home');
 Route::get('/bai-viet/{slug}.html', 'PostController@show')->name('post.show');
+Route::get('/tags/{id}', [PageController::class, 'tags'])->name('tags.show');
 // Route::get('/', function () {
 //     return view('client.page.home');
 // });
@@ -63,40 +65,40 @@ Route::get('/delete-posts', function () {
 Route::get('/count-post', function () {
     $totalPost = \App\Models\Post::where('status', 2)->count();
 
-    echo "Tổng số bài viết là " . $totalPost;
+    echo "Tổng số bài viết là ".$totalPost;
 });
 
 Route::get('/posts', function () {
     $posts = \App\Models\Post::all();
-	foreach($posts as $post) {
-		echo $post->title . "<br>";
-	}
+    foreach ($posts as $post) {
+        echo $post->title."<br>";
+    }
 });
 
 Route::get('/posts-by-category', function () {
     $posts = \App\Models\Post::where('category_id', 3)->where('status', 1)->get();
-	foreach($posts as $post) {
-		echo $post->title . "<br>";
-	}
+    foreach ($posts as $post) {
+        echo $post->title."<br>";
+    }
 });
 Route::get('/posts-by-where-or', function () {
     $posts = \App\Models\Post::where('id', 10)->orWhere('id', 12)->get();
-	foreach($posts as $post) {
-		echo $post->title . "<br>";
-	}
+    foreach ($posts as $post) {
+        echo $post->title."<br>";
+    }
 });
 
 Route::get('/posts-by-where-or2', function () {
     $posts = \App\Models\Post::where('id', 10)->orWhere(function ($query) {
-    	$query->where('id', 12);
-    	$query->where('status', 1);
+        $query->where('id', 12);
+        $query->where('status', 1);
     })->get();
     // $posts = \App\Models\Post::where('id', 10)->orWhere('id', 12);->orWhere('status', 1);->get();
 
     // (id = 10) || (id = 12 && status = 1)
-	foreach($posts as $post) {
-		echo $post->title . "<br>";
-	}
+    foreach ($posts as $post) {
+        echo $post->title."<br>";
+    }
 });
 
 
@@ -125,17 +127,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::delete('posts/{id}', 'PostController@destroy')->name('posts.destroy');
     Route::get('categories/{id}/posts', 'CategoryController@posts');
     Route::get('tags/{id}/(posts', 'TagController@posts');
-    Route::get('only-male', function() {
+    Route::get('only-male', function () {
         echo "Male Zone";
     })->middleware('only.male');
 });
 // Cập nhật dữ liệu
 
 
-
-
 Route::get('fake-du-lieu', function () {
-    for ($i=0; $i < 122; $i++) {
+    for ($i = 0; $i < 122; $i++) {
         $post = new \App\Models\Post;
         $post->title = 'Nóng nhất thể thao tối 9/1: Mayweather lại "cà khịa" Pacquiao là ông già';
         $post->description = 'Nóng nhất thể thao tối 9/1: Mayweather lại "cà khịa" Pacquiao là ông già';
@@ -163,7 +163,7 @@ Route::get('fake-category', function () {
 
 
 Route::get('fake-user', function () {
-    $user =  new \App\Models\User;
+    $user = new \App\Models\User;
     $user->name = 'Nguyễn Thị A';
     $user->email = 'ant@topcv.vn';
     $user->gender = 2;
@@ -172,7 +172,7 @@ Route::get('fake-user', function () {
 });
 
 Route::get('fake-profile', function () {
-    $profile =  new \App\Models\Profile;
+    $profile = new \App\Models\Profile;
 
     $profile->id_code = '12341231234';
     $profile->address = 'Ha Noi';
@@ -188,7 +188,6 @@ Route::get('relationship/one-to-one', function () {
     echo "Name: {$user->name} <br>";
     echo "Address: {$user->profile->address} <br>";
 });
-
 
 
 Route::get('relationship/one-to-one-reverse', function () {
@@ -226,14 +225,14 @@ Route::get('relationship/one-to-one-reverse', function () {
     echo "Email: {$profile->user->email} <br>";
 });
 
-Route::get('403', function() {
+Route::get('403', function () {
     return view('403');
 })->name('403');
 
-Route::get('test', function() {
+Route::get('test', function () {
     $posts = \App\Models\Post::whereIn('category_id', [2, 3])->orderBy('id', 'desc')->get();
 
-    $postsWith2Category = $posts->filter(function($post) {
+    $postsWith2Category = $posts->filter(function ($post) {
         return $post->category_id == 2;
     });
 
@@ -247,47 +246,47 @@ Route::get('test', function() {
     // echo $first;
 
     $arr = collect([2, 1, 4, 6, 50, 10]);
-    echo $arr->first() . "<br>";
-    echo $arr->last() . "<br>";
-    echo $arr->max() . "<br>";
-    echo $arr->min() . "<br>";
+    echo $arr->first()."<br>";
+    echo $arr->last()."<br>";
+    echo $arr->max()."<br>";
+    echo $arr->min()."<br>";
     echo "Duyệt mảng :<br>";
     $arr->push(90);
     foreach ($arr as $key => $value) {
-        echo $value . "<br>";
+        echo $value."<br>";
     }
     echo "Mảng sắp xếp :<br>";
     $arr = $arr->sort();
     foreach ($arr as $key => $value) {
-        echo $value . "<br>";
+        echo $value."<br>";
     }
     echo "Mảng lẻ :<br>";
     $oddArr = $arr->filter(function ($item) {
-        return $item % 2 == 1;
+        return $item%2 == 1;
     });
     foreach ($oddArr as $key => $value) {
-        echo $value . "<br>";
+        echo $value."<br>";
     }
     echo "Mảng chẵn :<br>";
     $oddArr = $arr->filter(function ($item) {
-        return $item % 2 == 0;
+        return $item%2 == 0;
     });
     foreach ($oddArr as $key => $value) {
-        echo $value . "<br>";
+        echo $value."<br>";
     }
     echo "Mảng sau khi nhân tất cả phần tử cho 5 :<br>";
     $mul5Arr = $arr->map(function ($item) {
-        return $item * 5;
+        return $item*5;
     });
     foreach ($mul5Arr as $key => $value) {
-        echo $value . "<br>";
+        echo $value."<br>";
     }
 
 
 });
 
 
-Route::get('test-timeout', function() {
+Route::get('test-timeout', function () {
     sleep(120);
     echo "Hello";
 });
